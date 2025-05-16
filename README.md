@@ -117,3 +117,7 @@ Before you submit your solution, you need to save your progress with git.
   * Click on + Create Submission. Connect your repository for this lab.
   * For additional information on submitting assignments in CodeGrade: [Getting Started in Canvas](https://help.codegrade.com/for-students/getting-started/getting-started-in-canvas)
 
+### Book and Coffee Classes
+This project is a simple Python script that lets you create and interact with two objects: a Book and a Coffee. You can make a book, flip through its pages, or grab a coffee and leave a tip. It’s a way to practice using classes, properties, and methods in Python while following good coding and Git habits like writing clean dry code, documenting your work, and using branches.
+
+![Bookstore code]
