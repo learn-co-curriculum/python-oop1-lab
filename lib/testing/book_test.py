@@ -1,33 +1,80 @@
-#!/usr/bin/env python3
+# testing/book_test.py
+# Test suite for the Book class.
+
+import pytest
+import sys
+import os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'lib'))
 
 from book import Book
 
-import io
-import sys
 
 class TestBook:
-    '''Book in book.py'''
+    """Tests for the Book class."""
 
-    def test_has_title_and_page_count(self):
-        '''has the title and page_count passed into __init__, and values can be set to new instance.'''
-        book = Book("And Then There Were None", 272)
-        assert(book.page_count == 272)
-        assert(book.title == "And Then There Were None")
+    # ── __init__ ──────────────────────────────────────────────────────────────
 
-    def test_requires_int_page_count(self):
-        '''prints "page_count must be an integer" if page_count is not an integer.'''
-        book = Book("And Then There Were None", 272)
-        captured_out = io.StringIO()
-        sys.stdout = captured_out
-        book.page_count = "not an integer"
-        sys.stdout = sys.__stdout__
-        assert captured_out.getvalue() == "page_count must be an integer\n"
+    def test_book_has_title(self):
+        """Book stores the title passed in."""
+        book = Book("Python Crash Course", 544)
+        assert book.title == "Python Crash Course"
 
-    def test_can_turn_page(self):
-        '''outputs "Flipping the page...wow, you read fast!" when method turn_page() is called'''
-        book = Book("The World According to Garp", 69)
-        captured_out = io.StringIO()
-        sys.stdout = captured_out
+    def test_book_has_page_count(self):
+        """Book stores the page count passed in."""
+        book = Book("Python Crash Course", 544)
+        assert book.page_count == 544
+
+    def test_book_title_can_be_changed(self):
+        """Book title can be updated after creation."""
+        book = Book("Python Crash Course", 544)
+        book.title = "Clean Code"
+        assert book.title == "Clean Code"
+
+    # ── page_count property ───────────────────────────────────────────────────
+
+    def test_page_count_must_be_integer(self, capsys):
+        """Non-integer page_count prints an error message."""
+        book = Book("Python Crash Course", "five hundred")
+        captured = capsys.readouterr()
+        assert "page_count must be an integer" in captured.out
+
+    def test_page_count_invalid_sets_none(self):
+        """Non-integer page_count results in None being stored."""
+        book = Book("Python Crash Course", "five hundred")
+        assert book.page_count is None
+
+    def test_page_count_valid_integer(self):
+        """Valid integer page_count is stored correctly."""
+        book = Book("Clean Code", 431)
+        assert book.page_count == 431
+
+    def test_page_count_can_be_updated(self):
+        """page_count can be updated via the setter."""
+        book = Book("Clean Code", 431)
+        book.page_count = 500
+        assert book.page_count == 500
+
+    def test_page_count_update_invalid(self, capsys):
+        """Updating page_count with a non-integer prints an error."""
+        book = Book("Clean Code", 431)
+        book.page_count = "lots"
+        captured = capsys.readouterr()
+        assert "page_count must be an integer" in captured.out
+
+    # ── turn_page() ───────────────────────────────────────────────────────────
+
+    def test_turn_page_prints_message(self, capsys):
+        """turn_page() prints the correct message."""
+        book = Book("Python Crash Course", 544)
         book.turn_page()
-        sys.stdout = sys.__stdout__
-        assert(captured_out.getvalue() == "Flipping the page...wow, you read fast!\n")
+        captured = capsys.readouterr()
+        assert "Flipping the page...wow, you read fast!" in captured.out
+
+    def test_turn_page_can_be_called_multiple_times(self, capsys):
+        """turn_page() can be called more than once."""
+        book = Book("Python Crash Course", 544)
+        book.turn_page()
+        book.turn_page()
+        captured = capsys.readouterr()
+        assert captured.out.count("Flipping the page") == 2
