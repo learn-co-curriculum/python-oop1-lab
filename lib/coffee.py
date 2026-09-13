@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
 
 class Coffee:
-
     def __init__(self, size, price):
         self.size = size
         self.price = price
@@ -20,3 +18,4 @@ class Coffee:
     def tip(self):
         print("This coffee is great, here’s a tip!")
         self.price += 1
+
