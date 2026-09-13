@@ -1,4 +1,3 @@
-
 class Book:
     def __init__(self, title, page_count):
         self.title = title
@@ -17,4 +16,3 @@ class Book:
 
     def turn_page(self):
         print("Flipping the page...wow, you read fast!")
-
